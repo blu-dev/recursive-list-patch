@@ -17,6 +17,9 @@ pub struct Args {
 
     #[clap(long)]
     pub labels: PathBuf,
+
+    #[clap(long)]
+    pub delete: bool,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -58,7 +61,25 @@ fn main() -> anyhow::Result<()> {
         let parent = args.output.join(motion);
         std::fs::create_dir_all(&parent)?;
 
-        std::fs::write(parent.join("motion_patch.yml"), &yaml)?;
+        std::fs::write(parent.join("motion_patch.yaml"), &yaml)?;
+    }
+
+    if !args.delete {
+        return Ok(());
+    }
+
+    for entry in walkdir::WalkDir::new(&args.target).contents_first(true) {
+        let entry = entry?;
+
+        if entry.file_type().is_dir() {
+            if std::fs::read_dir(entry.path())?.next().is_none() {
+                std::fs::remove_dir(entry.path())?;
+            }
+        } else {
+            if entry.path().file_name().unwrap().to_str().unwrap() == "motion_list.bin" {
+                std::fs::remove_file(entry.path())?;
+            }
+        }
     }
 
     Ok(())

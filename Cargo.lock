@@ -327,7 +327,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 [[package]]
 name = "motion-patch"
 version = "0.1.0"
-source = "git+https://github.com/blu-dev/motion-patch#e89df791fb5e88138a9fb902127ef89b3edcb7ee"
+source = "git+https://github.com/blu-dev/motion-patch#303e61d117dac718854ceb57eeb15dd1f7a5a584"
 dependencies = [
  "hash40",
  "motion_list_rs",
